@@ -23,7 +23,17 @@ if uploaded_file is not None:
     st.subheader("Basic Statistics")
     st.write(df.describe())
 
-    
+    # Check if necessary columns exist
+    required_columns = ['hours_studied', 'attendance', 'parental_involvement', 
+                        'Access_to_Resources', 'Extracurricular_activities', 
+                        'previous_scores', 'Internet_Access', 'overall_score']  # Replaced 'performance' with 'overall_score'
+
+    missing_columns = [col for col in required_columns if col not in df.columns]
+    if missing_columns:
+        st.error(f"The following columns are missing from the dataset: {', '.join(missing_columns)}")
+    else:
+        # Drop rows with missing values in critical columns
+        df = df.dropna(subset=required_columns)
 
         # Visualizing the data
         st.subheader("Visualize Data")
@@ -85,6 +95,9 @@ if uploaded_file is not None:
 else:
     st.warning("Please upload a CSV file to begin analysis.")
 
-                        
+
+       
+        
+        
        
         
