@@ -5,7 +5,7 @@ import seaborn as sns
 import plotly.express as px
 
 # Title of the app
-st.title('Student Engagement Analysis')  # Title updated to reflect new focus
+st.title('Student Performance Analysis')  # Title updated to reflect new focus
 
 # Sidebar for uploading the data
 st.sidebar.header("Upload Data")
