@@ -5,7 +5,7 @@ import seaborn as sns
 import plotly.express as px
 
 # Title of the app
-st.title('Student Performance Analysis')
+st.title('Student Engagement Analysis')  # Title updated to reflect new focus
 
 # Sidebar for uploading the data
 st.sidebar.header("Upload Data")
@@ -26,7 +26,7 @@ if uploaded_file is not None:
     # Check if necessary columns exist
     required_columns = ['hours_studied', 'attendance', 'parental_involvement', 
                         'Access_to_Resources', 'Extracurricular_activities', 
-                        'previous_scores', 'Internet_Access', 'performance']
+                        'previous_scores', 'Internet_Access', 'overall_score']  # Replaced 'performance' with 'overall_score'
 
     missing_columns = [col for col in required_columns if col not in df.columns]
     if missing_columns:
@@ -38,59 +38,63 @@ if uploaded_file is not None:
         # Visualizing the data
         st.subheader("Visualize Data")
 
-        # Performance vs Hours Studied (Scatter Plot)
-        st.write("Hours Studied vs Performance (Scatter Plot)")
-        fig = px.scatter(df, x="hours_studied", y="performance", title="Hours Studied vs Performance")
+        # Overall Score vs Hours Studied (Scatter Plot)
+        st.write("Hours Studied vs Overall Score (Scatter Plot)")
+        fig = px.scatter(df, x="hours_studied", y="overall_score", title="Hours Studied vs Overall Score")  # Updated variable
         st.plotly_chart(fig)
 
-        # Performance vs Attendance (Box Plot)
-        st.write("Performance by Attendance (Box Plot)")
+        # Overall Score vs Attendance (Box Plot)
+        st.write("Overall Score by Attendance (Box Plot)")
         fig, ax = plt.subplots(figsize=(8, 5))
-        sns.boxplot(x='attendance', y='performance', data=df, ax=ax)
-        ax.set_title('Performance Distribution by Attendance')
+        sns.boxplot(x='attendance', y='overall_score', data=df, ax=ax)  # Updated variable
+        ax.set_title('Overall Score Distribution by Attendance')
         st.pyplot(fig)
 
-        # Performance by Parental Involvement (Bar Plot)
-        st.write("Performance by Parental Involvement (Bar Plot)")
-        parental_performance = df.groupby('parental_involvement')['performance'].mean().reset_index()
+        # Overall Score by Parental Involvement (Bar Plot)
+        st.write("Overall Score by Parental Involvement (Bar Plot)")
+        parental_score = df.groupby('parental_involvement')['overall_score'].mean().reset_index()  # Updated variable
         fig, ax = plt.subplots(figsize=(8, 5))
-        sns.barplot(x='parental_involvement', y='performance', data=parental_performance, ax=ax)
-        ax.set_title('Performance by Parental Involvement')
+        sns.barplot(x='parental_involvement', y='overall_score', data=parental_score, ax=ax)  # Updated variable
+        ax.set_title('Overall Score by Parental Involvement')
         st.pyplot(fig)
 
-        # Performance by Access to Resources (Box Plot)
-        st.write("Performance by Access to Resources (Box Plot)")
+        # Overall Score by Access to Resources (Box Plot)
+        st.write("Overall Score by Access to Resources (Box Plot)")
         fig, ax = plt.subplots(figsize=(8, 5))
-        sns.boxplot(x='Access_to_Resources', y='performance', data=df, ax=ax)
-        ax.set_title('Performance by Access to Resources')
+        sns.boxplot(x='Access_to_Resources', y='overall_score', data=df, ax=ax)  # Updated variable
+        ax.set_title('Overall Score by Access to Resources')
         st.pyplot(fig)
 
-        # Performance by Extracurricular Activities (Box Plot)
-        st.write("Performance by Extracurricular Activities (Box Plot)")
+        # Overall Score by Extracurricular Activities (Box Plot)
+        st.write("Overall Score by Extracurricular Activities (Box Plot)")
         fig, ax = plt.subplots(figsize=(8, 5))
-        sns.boxplot(x='Extracurricular_activities', y='performance', data=df, ax=ax)
-        ax.set_title('Performance by Extracurricular Activities')
+        sns.boxplot(x='Extracurricular_activities', y='overall_score', data=df, ax=ax)  # Updated variable
+        ax.set_title('Overall Score by Extracurricular Activities')
         st.pyplot(fig)
 
-        # Previous Scores vs Performance (Scatter Plot)
-        st.write("Previous Scores vs Performance (Scatter Plot)")
-        fig = px.scatter(df, x="previous_scores", y="performance", title="Previous Scores vs Performance")
+        # Previous Scores vs Overall Score (Scatter Plot)
+        st.write("Previous Scores vs Overall Score (Scatter Plot)")
+        fig = px.scatter(df, x="previous_scores", y="overall_score", title="Previous Scores vs Overall Score")  # Updated variable
         st.plotly_chart(fig)
 
-        # Performance by Internet Access (Box Plot)
-        st.write("Performance by Internet Access (Box Plot)")
+        # Overall Score by Internet Access (Box Plot)
+        st.write("Overall Score by Internet Access (Box Plot)")
         fig, ax = plt.subplots(figsize=(8, 5))
-        sns.boxplot(x='Internet_Access', y='performance', data=df, ax=ax)
-        ax.set_title('Performance by Internet Access')
+        sns.boxplot(x='Internet_Access', y='overall_score', data=df, ax=ax)  # Updated variable
+        ax.set_title('Overall Score by Internet Access')
         st.pyplot(fig)
 
         # Display some specific analysis
         st.subheader("Advanced Analysis")
 
-        # Filter students by performance
-        performance_threshold = st.slider("Select Performance Threshold", min_value=0, max_value=100, value=50)
-        filtered_students = df[df['performance'] > performance_threshold]
-        st.write(f"Students with performance greater than {performance_threshold}:", filtered_students)
+        # Filter students by overall score
+        score_threshold = st.slider("Select Overall Score Threshold", min_value=0, max_value=100, value=50)
+        filtered_students = df[df['overall_score'] > score_threshold]  # Updated variable
+        st.write(f"Students with overall score greater than {score_threshold}:", filtered_students)
 
 else:
     st.warning("Please upload a CSV file to begin analysis.")
+
+                        
+       
+        
