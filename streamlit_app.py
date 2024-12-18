@@ -23,45 +23,74 @@ if uploaded_file is not None:
     st.subheader("Basic Statistics")
     st.write(df.describe())
 
-    # Visualizing the data
-    st.subheader("Visualize Data")
+    # Check if necessary columns exist
+    required_columns = ['hours_studied', 'attendance', 'parental_involvement', 
+                        'Access_to_Resources', 'Extracurricular_activities', 
+                        'previous_scores', 'Internet_Access', 'performance']
 
-    # Performance vs Study Time scatter plot
-    st.write("Study Time vs Performance")
-    fig = px.scatter(df, x="study_time", y="performance", title="Study Time vs Performance")
-    st.plotly_chart(fig)
+    missing_columns = [col for col in required_columns if col not in df.columns]
+    if missing_columns:
+        st.error(f"The following columns are missing from the dataset: {', '.join(missing_columns)}")
+    else:
+        # Drop rows with missing values in critical columns
+        df = df.dropna(subset=required_columns)
 
-    # Box plot of performance distribution by gender
-    st.write("Performance by Gender (Box Plot)")
-    fig, ax = plt.subplots(figsize=(8, 5))
-    sns.boxplot(x='gender', y='performance', data=df, ax=ax)
-    ax.set_title('Performance Distribution by Gender')
-    st.pyplot(fig)
+        # Visualizing the data
+        st.subheader("Visualize Data")
 
-    # Performance trend over study time (Line plot)
-    st.write("Performance Trend by Study Time (Line Plot)")
-    performance_trend = df.groupby('study_time')['performance'].mean().reset_index()
-    fig, ax = plt.subplots(figsize=(8, 5))
-    sns.lineplot(x='study_time', y='performance', data=performance_trend, ax=ax)
-    ax.set_title('Performance Trend by Study Time')
-    st.pyplot(fig)
+        # Performance vs Hours Studied (Scatter Plot)
+        st.write("Hours Studied vs Performance (Scatter Plot)")
+        fig = px.scatter(df, x="hours_studied", y="performance", title="Hours Studied vs Performance")
+        st.plotly_chart(fig)
 
-    # Display some specific analysis
-    st.subheader("Advanced Analysis")
+        # Performance vs Attendance (Box Plot)
+        st.write("Performance by Attendance (Box Plot)")
+        fig, ax = plt.subplots(figsize=(8, 5))
+        sns.boxplot(x='attendance', y='performance', data=df, ax=ax)
+        ax.set_title('Performance Distribution by Attendance')
+        st.pyplot(fig)
 
-    # Filter students by performance
-    performance_threshold = st.slider("Select Performance Threshold", min_value=0, max_value=100, value=50)
-    filtered_students = df[df['performance'] > performance_threshold]
-    st.write(f"Students with performance greater than {performance_threshold}:", filtered_students)
+        # Performance by Parental Involvement (Bar Plot)
+        st.write("Performance by Parental Involvement (Bar Plot)")
+        parental_performance = df.groupby('parental_involvement')['performance'].mean().reset_index()
+        fig, ax = plt.subplots(figsize=(8, 5))
+        sns.barplot(x='parental_involvement', y='performance', data=parental_performance, ax=ax)
+        ax.set_title('Performance by Parental Involvement')
+        st.pyplot(fig)
 
-    # Additional analysis could be added here based on the data, such as clustering, regression models, etc.
+        # Performance by Access to Resources (Box Plot)
+        st.write("Performance by Access to Resources (Box Plot)")
+        fig, ax = plt.subplots(figsize=(8, 5))
+        sns.boxplot(x='Access_to_Resources', y='performance', data=df, ax=ax)
+        ax.set_title('Performance by Access to Resources')
+        st.pyplot(fig)
+
+        # Performance by Extracurricular Activities (Box Plot)
+        st.write("Performance by Extracurricular Activities (Box Plot)")
+        fig, ax = plt.subplots(figsize=(8, 5))
+        sns.boxplot(x='Extracurricular_activities', y='performance', data=df, ax=ax)
+        ax.set_title('Performance by Extracurricular Activities')
+        st.pyplot(fig)
+
+        # Previous Scores vs Performance (Scatter Plot)
+        st.write("Previous Scores vs Performance (Scatter Plot)")
+        fig = px.scatter(df, x="previous_scores", y="performance", title="Previous Scores vs Performance")
+        st.plotly_chart(fig)
+
+        # Performance by Internet Access (Box Plot)
+        st.write("Performance by Internet Access (Box Plot)")
+        fig, ax = plt.subplots(figsize=(8, 5))
+        sns.boxplot(x='Internet_Access', y='performance', data=df, ax=ax)
+        ax.set_title('Performance by Internet Access')
+        st.pyplot(fig)
+
+        # Display some specific analysis
+        st.subheader("Advanced Analysis")
+
+        # Filter students by performance
+        performance_threshold = st.slider("Select Performance Threshold", min_value=0, max_value=100, value=50)
+        filtered_students = df[df['performance'] > performance_threshold]
+        st.write(f"Students with performance greater than {performance_threshold}:", filtered_students)
 
 else:
     st.warning("Please upload a CSV file to begin analysis.")
-
-    
-
-   
-
-
- 
