@@ -5,7 +5,7 @@ import seaborn as sns
 import plotly.express as px
 
 # Title of the app
-st.title('Student Performance Analysis')  # Title updated to reflect new focus
+st.title('Student Performance Analysis')
 
 # Sidebar for uploading the data
 st.sidebar.header("Upload Data")
@@ -15,86 +15,59 @@ if uploaded_file is not None:
     # Load the data
     df = pd.read_csv(uploaded_file)
 
-    # Display dataset
-    st.subheader("Dataset Overview")
-    st.write(df.head())
-
-    # Show some basic statistics about the dataset
-    st.subheader("Basic Statistics")
-    st.write(df.describe())
-
-    # Check if necessary columns exist
-    required_columns = ['hours_studied', 'attendance', 'parental_involvement', 
-                        'Access_to_Resources', 'Extracurricular_activities', 
-                        'previous_scores', 'Internet_Access', 'overall_score']  # Replaced 'performance' with 'overall_score'
-
+    # Check required columns
+    required_columns = ['Hours_Studied', 'Exam_Score', 'Gender']
     missing_columns = [col for col in required_columns if col not in df.columns]
     if missing_columns:
         st.error(f"The following columns are missing from the dataset: {', '.join(missing_columns)}")
     else:
-        # Drop rows with missing values in critical columns
-        df = df.dropna(subset=required_columns)
+        # Display dataset
+        st.subheader("Dataset Overview")
+        st.write(df.head())
+
+        # Show some basic statistics about the dataset
+        st.subheader("Basic Statistics")
+        st.write(df.describe())
 
         # Visualizing the data
         st.subheader("Visualize Data")
 
-        # Overall Score vs Hours Studied (Scatter Plot)
-        st.write("Hours Studied vs Overall Score (Scatter Plot)")
-        fig = px.scatter(df, x="hours_studied", y="overall_score", title="Hours Studied vs Overall Score")  # Updated variable
+        # Performance vs Study Time scatter plot
+        st.write("Hours Studied vs Exam Score")
+        fig = px.scatter(df, x="Hours_Studied", y="Exam_Score", title="Hours Studied vs Exam Score")
         st.plotly_chart(fig)
 
-        # Overall Score vs Attendance (Box Plot)
-        st.write("Overall Score by Attendance (Box Plot)")
+        # Box plot of performance distribution by gender
+        st.write("Exam Score by Gender (Box Plot)")
         fig, ax = plt.subplots(figsize=(8, 5))
-        sns.boxplot(x='attendance', y='overall_score', data=df, ax=ax)  # Updated variable
-        ax.set_title('Overall Score Distribution by Attendance')
+        sns.boxplot(x='Gender', y='Exam_Score', data=df, ax=ax)
+        ax.set_title('Exam Score Distribution by Gender')
         st.pyplot(fig)
 
-        # Overall Score by Parental Involvement (Bar Plot)
-        st.write("Overall Score by Parental Involvement (Bar Plot)")
-        parental_score = df.groupby('parental_involvement')['overall_score'].mean().reset_index()  # Updated variable
+        # Performance trend over study time (Line plot)
+        st.write("Exam Score Trend by Hours Studied (Line Plot)")
+        performance_trend = df.groupby('Hours_Studied')['Exam_Score'].mean().reset_index()
         fig, ax = plt.subplots(figsize=(8, 5))
-        sns.barplot(x='parental_involvement', y='overall_score', data=parental_score, ax=ax)  # Updated variable
-        ax.set_title('Overall Score by Parental Involvement')
-        st.pyplot(fig)
-
-        # Overall Score by Access to Resources (Box Plot)
-        st.write("Overall Score by Access to Resources (Box Plot)")
-        fig, ax = plt.subplots(figsize=(8, 5))
-        sns.boxplot(x='Access_to_Resources', y='overall_score', data=df, ax=ax)  # Updated variable
-        ax.set_title('Overall Score by Access to Resources')
-        st.pyplot(fig)
-
-        # Overall Score by Extracurricular Activities (Box Plot)
-        st.write("Overall Score by Extracurricular Activities (Box Plot)")
-        fig, ax = plt.subplots(figsize=(8, 5))
-        sns.boxplot(x='Extracurricular_activities', y='overall_score', data=df, ax=ax)  # Updated variable
-        ax.set_title('Overall Score by Extracurricular Activities')
-        st.pyplot(fig)
-
-        # Previous Scores vs Overall Score (Scatter Plot)
-        st.write("Previous Scores vs Overall Score (Scatter Plot)")
-        fig = px.scatter(df, x="previous_scores", y="overall_score", title="Previous Scores vs Overall Score")  # Updated variable
-        st.plotly_chart(fig)
-
-        # Overall Score by Internet Access (Box Plot)
-        st.write("Overall Score by Internet Access (Box Plot)")
-        fig, ax = plt.subplots(figsize=(8, 5))
-        sns.boxplot(x='Internet_Access', y='overall_score', data=df, ax=ax)  # Updated variable
-        ax.set_title('Overall Score by Internet Access')
+        sns.lineplot(x='Hours_Studied', y='Exam_Score', data=performance_trend, ax=ax)
+        ax.set_title('Exam Score Trend by Hours Studied')
         st.pyplot(fig)
 
         # Display some specific analysis
         st.subheader("Advanced Analysis")
 
-        # Filter students by overall score
-        score_threshold = st.slider("Select Overall Score Threshold", min_value=0, max_value=100, value=50)
-        filtered_students = df[df['overall_score'] > score_threshold]  # Updated variable
-        st.write(f"Students with overall score greater than {score_threshold}:", filtered_students)
+        # Filter students by performance
+        performance_threshold = st.slider("Select Exam Score Threshold", min_value=0, max_value=100, value=50)
+        filtered_students = df[df['Exam_Score'] > performance_threshold]
+        st.write(f"Students with Exam Score greater than {performance_threshold}:", filtered_students)
+
+        # Additional analysis could be added here based on the data, such as clustering, regression models, etc.
 
 else:
     st.warning("Please upload a CSV file to begin analysis.")
 
+    
+        
+       
 
        
         
